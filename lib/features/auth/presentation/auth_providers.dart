@@ -1,12 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/api/api_client.dart';
+import '../../../core/storage/secure_storage_service.dart';
+import '../data/api_auth_repository.dart';
 import '../data/auth_repository.dart';
 import '../domain/app_user.dart';
 
-/// Provider for the AuthRepository.
-/// Throws UnimplementedError by default. Must be overridden in ProviderScope
-/// if a concrete implementation is provided.
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  throw UnimplementedError('AuthRepository is not implemented yet.');
+  final repository = ApiAuthRepository(
+    ref.watch(apiClientProvider),
+    ref.watch(secureStorageProvider),
+  );
+  ref.onDispose(repository.dispose);
+  return repository;
 });
 
 /// Exposes the current authentication state as a stream.

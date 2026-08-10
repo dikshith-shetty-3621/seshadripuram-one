@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/domain/user_role.dart';
 import '../../features/auth/presentation/auth_providers.dart';
 import '../../features/auth/presentation/login_screen.dart';
+import '../../features/admin/dashboard/presentation/admin_dashboard_screen.dart';
 import '../../features/student/dashboard/presentation/student_dashboard_screen.dart';
 import '../../features/teacher/dashboard/presentation/teacher_dashboard_screen.dart';
 
@@ -28,22 +29,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       // 2. Authenticated users shouldn't be on the login screen
       if (isGoingToLogin) {
-        if (user.role == UserRole.student) {
-          return '/student/dashboard';
-        } else if (user.role == UserRole.teacher) {
-          return '/teacher/dashboard';
-        }
+        return switch (user.role) {
+          UserRole.student => '/student/dashboard',
+          UserRole.teacher => '/teacher/dashboard',
+          UserRole.admin => '/admin/dashboard',
+        };
       }
 
       // 3. Role-based Route Protection
       final isGoingToStudent = state.matchedLocation.startsWith('/student');
       final isGoingToTeacher = state.matchedLocation.startsWith('/teacher');
+      final isGoingToAdmin = state.matchedLocation.startsWith('/admin');
 
       if (isGoingToStudent && user.role != UserRole.student) {
-        return '/teacher/dashboard';
+        return '/login';
       }
       if (isGoingToTeacher && user.role != UserRole.teacher) {
-        return '/student/dashboard';
+        return '/login';
+      }
+      if (isGoingToAdmin && user.role != UserRole.admin) {
+        return '/login';
       }
 
       return null;
@@ -60,6 +65,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/teacher/dashboard',
         builder: (context, state) => const TeacherDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/admin/dashboard',
+        builder: (context, state) => const AdminDashboardScreen(),
       ),
     ],
   );

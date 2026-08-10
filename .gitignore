@@ -49,6 +49,7 @@ backend/.env
 backend/.env.*
 backend/dist/
 backend/build/
+backend/*.db
 
 # Allow example environment configuration
 !backend/.env.example

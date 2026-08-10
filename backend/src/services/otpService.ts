@@ -1,16 +1,33 @@
+import { randomInt } from "node:crypto";
+import { config } from "../config";
+
 export interface OtpService {
   generateOtp(): string;
   sendOtp(destination: string, otp: string): Promise<void>;
 }
 
-export class ConsoleOtpService implements OtpService {
+class ConsoleOtpService implements OtpService {
   generateOtp(): string {
-    return Math.floor(100000 + Math.random() * 900000).toString();
+    return randomInt(100000, 1000000).toString();
   }
 
   async sendOtp(destination: string, otp: string): Promise<void> {
-    console.log(`\n========================================`);
-    console.log(`[DEVELOPMENT] OTP for ${destination}: ${otp}`);
-    console.log(`========================================\n`);
+    // Available only with explicit local-development configuration.
+    console.info(`[development OTP] destination=${destination} otp=${otp}`);
   }
+}
+
+class DisabledOtpService implements OtpService {
+  generateOtp(): string {
+    return randomInt(100000, 1000000).toString();
+  }
+
+  async sendOtp(): Promise<void> {
+    throw new Error("No OTP provider is configured");
+  }
+}
+
+export function createOtpService(): OtpService {
+  if (config.otpProvider === "console" && !config.isProduction) return new ConsoleOtpService();
+  return new DisabledOtpService();
 }

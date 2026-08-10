@@ -5,9 +5,8 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-const client = createClient({
-  url: process.env.TURSO_URL || "file:./local.db",
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+const url = process.env.TURSO_DATABASE_URL || "file:./local.db";
+const authToken = process.env.TURSO_AUTH_TOKEN;
+const client = createClient(authToken ? { url, authToken } : { url });
 
 export const db = drizzle(client, { schema });

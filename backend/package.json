@@ -1,12 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Seshadripuram One API",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "rm -f test.db && TURSO_DATABASE_URL=file:./test.db JWT_SECRET=development-test-secret-that-is-at-least-32-characters OTP_PROVIDER=console NODE_ENV=test drizzle-kit migrate && TURSO_DATABASE_URL=file:./test.db JWT_SECRET=development-test-secret-that-is-at-least-32-characters OTP_PROVIDER=console NODE_ENV=test vitest run",
+    "test:watch": "vitest",
     "dev": "tsx src/index.ts",
     "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts"
   },
@@ -26,6 +31,16 @@
     "uuid": "^14.0.1"
   },
   "devDependencies": {
-    "@types/uuid": "^10.0.0"
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.10.1",
+    "@types/supertest": "^6.0.3",
+    "drizzle-kit": "^0.31.8",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   }
 }
