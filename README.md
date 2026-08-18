@@ -521,7 +521,7 @@ flutter run --dart-define=API_BASE_URL=https://<backend-url>
 - [ ] **Phase 4 — Academic Core**
   Student & teacher dashboards, announcements, class updates, timetable, attendance, subject-wise attendance, absence history
 - [ ] **Phase 5 — Academic Performance**
-  Internal marks, SIM examination marks, project marks, performance overview
+  Internal marks, SEM examination marks, project marks, performance overview
 - [ ] **Phase 6 — Assignments & Learning**
   Assignments, submissions, notes, study materials, attachments, teacher uploads
 - [ ] **Phase 7 — Communication**
