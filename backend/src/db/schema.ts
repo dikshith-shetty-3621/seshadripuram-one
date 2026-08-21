@@ -62,3 +62,129 @@ export const authSessions = sqliteTable("auth_sessions", {
   revokedAt: integer("revoked_at"),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [index("auth_sessions_user_id_idx").on(table.userId)]);
+
+
+export const institutions = sqliteTable('institutions', {
+  id: text('id').primaryKey(),
+  code: text('code').notNull().unique(),
+  name: text('name').notNull(),
+  city: text('city'),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const departments = sqliteTable('departments', {
+  id: text('id').primaryKey(),
+  institutionId: text('institution_id').notNull().references(() => institutions.id),
+  code: text('code').notNull(),
+  name: text('name').notNull(),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex('departments_institution_code_unique').on(table.institutionId, table.code),
+  index('departments_institution_idx').on(table.institutionId),
+]);
+
+export const programs = sqliteTable('programs', {
+  id: text('id').primaryKey(),
+  departmentId: text('department_id').notNull().references(() => departments.id),
+  code: text('code').notNull(),
+  name: text('name').notNull(),
+  level: text('level').notNull(), // UG | PG
+  durationSemesters: integer('duration_semesters').notNull(),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex('programs_department_code_unique').on(table.departmentId, table.code),
+  index('programs_department_idx').on(table.departmentId),
+]);
+
+export const academicYears = sqliteTable('academic_years', {
+  id: text('id').primaryKey(),
+  institutionId: text('institution_id').notNull().references(() => institutions.id),
+  label: text('label').notNull(),
+  startDate: text('start_date').notNull(),
+  endDate: text('end_date').notNull(),
+  isCurrent: integer('is_current', { mode: 'boolean' }).notNull().default(false),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex('academic_years_institution_label_unique').on(table.institutionId, table.label),
+  index('academic_years_institution_idx').on(table.institutionId),
+]);
+
+export const semesters = sqliteTable('semesters', {
+  id: text('id').primaryKey(),
+  academicYearId: text('academic_year_id').notNull().references(() => academicYears.id),
+  number: integer('number').notNull(),
+  label: text('label').notNull(),
+  isCurrent: integer('is_current', { mode: 'boolean' }).notNull().default(false),
+}, (table) => [
+  uniqueIndex('semesters_academic_year_number_unique').on(table.academicYearId, table.number),
+  index('semesters_academic_year_idx').on(table.academicYearId),
+]);
+
+export const sections = sqliteTable('sections', {
+  id: text('id').primaryKey(),
+  programId: text('program_id').notNull().references(() => programs.id),
+  academicYearId: text('academic_year_id').notNull().references(() => academicYears.id),
+  semesterId: text('semester_id').notNull().references(() => semesters.id),
+  name: text('name').notNull(),
+  capacity: integer('capacity'),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+}, (table) => [
+  uniqueIndex('sections_program_year_semester_name_unique').on(table.programId, table.academicYearId, table.semesterId, table.name),
+  index('sections_program_idx').on(table.programId),
+  index('sections_semester_idx').on(table.semesterId),
+]);
+
+export const subjects = sqliteTable('subjects', {
+  id: text('id').primaryKey(),
+  departmentId: text('department_id').notNull().references(() => departments.id),
+  code: text('code').notNull(),
+  name: text('name').notNull(),
+  credits: integer('credits'),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+}, (table) => [
+  uniqueIndex('subjects_department_code_unique').on(table.departmentId, table.code),
+  index('subjects_department_idx').on(table.departmentId),
+]);
+
+export const subjectOfferings = sqliteTable('subject_offerings', {
+  id: text('id').primaryKey(),
+  subjectId: text('subject_id').notNull().references(() => subjects.id),
+  sectionId: text('section_id').notNull().references(() => sections.id),
+  semesterId: text('semester_id').notNull().references(() => semesters.id),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+}, (table) => [
+  uniqueIndex('subject_offerings_subject_section_semester_unique').on(table.subjectId, table.sectionId, table.semesterId),
+  index('subject_offerings_section_idx').on(table.sectionId),
+  index('subject_offerings_semester_idx').on(table.semesterId),
+]);
+
+export const enrollments = sqliteTable('enrollments', {
+  id: text('id').primaryKey(),
+  studentId: text('student_id').notNull().references(() => students.id),
+  sectionId: text('section_id').notNull().references(() => sections.id),
+  academicYearId: text('academic_year_id').notNull().references(() => academicYears.id),
+  semesterId: text('semester_id').notNull().references(() => semesters.id),
+  status: text('status').notNull().default('ACTIVE'), // ACTIVE | COMPLETED | TRANSFERRED | WITHDRAWN
+  enrolledAt: text('enrolled_at').default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex('enrollments_student_section_semester_unique').on(table.studentId, table.sectionId, table.semesterId),
+  index('enrollments_student_idx').on(table.studentId),
+  index('enrollments_section_idx').on(table.sectionId),
+]);
+
+export const teachingAssignments = sqliteTable('teaching_assignments', {
+  id: text('id').primaryKey(),
+  teacherId: text('teacher_id').notNull().references(() => teachers.id),
+  subjectOfferingId: text('subject_offering_id').notNull().references(() => subjectOfferings.id),
+  assignmentRole: text('assignment_role').notNull().default('PRIMARY'), // PRIMARY | ASSISTANT
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  assignedAt: text('assigned_at').default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  uniqueIndex('teaching_assignments_teacher_offering_unique').on(table.teacherId, table.subjectOfferingId),
+  index('teaching_assignments_teacher_idx').on(table.teacherId),
+  index('teaching_assignments_offering_idx').on(table.subjectOfferingId),
+]);

@@ -2,6 +2,19 @@
   "version": "1",
   "dialect": "sqlite",
   "entries": [
-    { "idx": 0, "version": "1", "when": 1786386600000, "tag": "0000_auth_foundation", "breakpoints": true }
+    {
+      "idx": 0,
+      "version": "1",
+      "when": 1786386600000,
+      "tag": "0000_auth_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1787346043780,
+      "tag": "0001_magical_masked_marvel",
+      "breakpoints": true
+    }
   ]
 }
