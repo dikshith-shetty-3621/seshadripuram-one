@@ -22,6 +22,7 @@ class _AdminImportScreenState extends ConsumerState<AdminImportScreen> {
   Map<String, dynamic>? _preview;
 
   static const _entities = [
+    'institutions',
     'departments',
     'programs',
     'academic_years',
@@ -39,6 +40,29 @@ class _AdminImportScreenState extends ConsumerState<AdminImportScreen> {
   void dispose() {
     _rowsController.dispose();
     super.dispose();
+  }
+
+  Future<void> _commitImport() async {
+    final preview = _preview;
+    if (preview == null || preview['invalidRows'] != 0) return;
+
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final response = await ref.read(apiClientProvider).post<Map<String, dynamic>>(
+        '/api/admin/imports/${preview['importJobId']}/commit',
+      );
+      if (mounted) setState(() => _preview = {...preview, ...?response.data});
+    } on DioException catch (error) {
+      final message = error.response?.data is Map<String, dynamic>
+          ? (error.response!.data['error']?.toString() ?? 'Import commit failed.')
+          : 'Import commit failed. Check your connection and permissions.';
+      if (mounted) setState(() => _error = message);
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   Future<void> _previewImport() async {
@@ -86,7 +110,7 @@ class _AdminImportScreenState extends ConsumerState<AdminImportScreen> {
               onEntityChanged: (value) => setState(() => _entity = value),
               onPreview: _previewImport,
             );
-            final result = _PreviewResult(error: _error, preview: _preview);
+            final result = _PreviewResult(error: _error, preview: _preview, loading: _loading, onCommit: _commitImport);
             return SingleChildScrollView(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: ConstrainedBox(
@@ -148,10 +172,12 @@ class _ImportForm extends StatelessWidget {
 }
 
 class _PreviewResult extends StatelessWidget {
-  const _PreviewResult({required this.error, required this.preview});
+  const _PreviewResult({required this.error, required this.preview, required this.loading, required this.onCommit});
 
   final String? error;
   final Map<String, dynamic>? preview;
+  final bool loading;
+  final VoidCallback onCommit;
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +191,11 @@ class _PreviewResult extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text('${preview!['validRows']} valid • ${preview!['invalidRows']} invalid', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: AppSpacing.sm),
-        Text(preview!['message']?.toString() ?? ''),
+        Text(preview!['message']?.toString() ?? (preview!['status'] == 'COMMITTED' ? 'Import committed successfully.' : '')),
+        if (preview!['status'] == 'PREVIEWED' && (preview!['invalidRows'] as int? ?? 0) == 0) ...[
+          const SizedBox(height: AppSpacing.md),
+          FilledButton.icon(onPressed: loading ? null : onCommit, icon: const Icon(Icons.publish_outlined), label: Text(loading ? 'Committing…' : 'Confirm and import')),
+        ],
         if (errors.isNotEmpty) ...[
           const SizedBox(height: AppSpacing.md),
           for (final item in errors) Text('Row ${item['row']}: ${item['message']}', style: const TextStyle(color: AppColors.danger)),

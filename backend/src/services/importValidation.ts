@@ -1,4 +1,5 @@
 export const importEntities = [
+  'institutions',
   'departments',
   'programs',
   'academic_years',
@@ -17,6 +18,7 @@ export type ImportEntity = (typeof importEntities)[number];
 type ImportRow = Record<string, unknown>;
 
 const requiredFields: Record<ImportEntity, string[]> = {
+  institutions: ['code', 'name'],
   departments: ['code', 'name'],
   programs: ['departmentCode', 'code', 'name', 'level', 'durationSemesters'],
   academic_years: ['label', 'startDate', 'endDate'],
@@ -41,6 +43,7 @@ function hasValue(row: ImportRow, field: string): boolean {
 
 function duplicateKey(entity: ImportEntity, row: ImportRow): string | null {
   const keys: Record<ImportEntity, string[]> = {
+    institutions: ['code'],
     departments: ['code'],
     programs: ['departmentCode', 'code'],
     academic_years: ['label'],
@@ -61,6 +64,8 @@ export interface ImportRowError {
   fields: string[];
   message: string;
 }
+
+export const committableImportEntities: ImportEntity[] = ['institutions', 'departments', 'students', 'teachers'];
 
 export interface ImportPreview {
   entity: ImportEntity;
