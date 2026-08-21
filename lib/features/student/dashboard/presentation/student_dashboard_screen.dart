@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/dashboard_components.dart';
+import '../../../academic/presentation/live_academic_sections.dart';
 
 class StudentDashboardScreen extends StatelessWidget {
   const StudentDashboardScreen({super.key});
@@ -28,22 +29,8 @@ class StudentDashboardScreen extends StatelessWidget {
               SizedBox(width: 180, child: StatCard(label: 'Unread notices', value: '4', icon: Icons.notifications_active_outlined, accent: AppColors.gold500)),
             ],
           );
-          const schedule = DashboardSection(
-            title: 'Today’s schedule',
-            child: Column(children: [
-              ScheduleCard(time: '09:00', subject: 'Web Technology', meta: 'Room 204 • Dr. Rao'),
-              SizedBox(height: AppSpacing.sm),
-              ScheduleCard(time: '11:00', subject: 'Database Systems', meta: 'Lab 2 • Prof. Mehta'),
-            ]),
-          );
-          const announcements = DashboardSection(
-            title: 'Announcements',
-            child: Column(children: [
-              AnnouncementTile(title: 'Examination timetable published', date: 'Today • Academic Office'),
-              SizedBox(height: AppSpacing.sm),
-              AnnouncementTile(title: 'Workshop registration is open', date: 'Yesterday • Department of Computer Science'),
-            ]),
-          );
+          const schedule = LiveTimetableSection(limit: 2);
+          const announcements = LiveAnnouncementsSection(limit: 2);
 
           final explore = Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.sm, children: [
             OutlinedButton.icon(onPressed: () => context.push('/student/timetable'), icon: const Icon(Icons.calendar_month_outlined), label: const Text('Full timetable')),

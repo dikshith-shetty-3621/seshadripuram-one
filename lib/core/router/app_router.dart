@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/auth/domain/user_role.dart';
 import '../../features/auth/presentation/auth_providers.dart';
 import '../../features/auth/presentation/login_screen.dart';
+import '../../features/academic/presentation/academic_live_screen.dart';
 import '../../features/admin/dashboard/presentation/admin_dashboard_screen.dart';
 import '../../features/admin/imports/presentation/admin_import_screen.dart';
 import '../widgets/demo_feature_screen.dart';
@@ -76,8 +77,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/admin/imports',
         builder: (context, state) => const AdminImportScreen(),
       ),
-      GoRoute(path: '/student/announcements', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.announcements)),
-      GoRoute(path: '/student/timetable', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.timetable)),
+      GoRoute(path: '/student/announcements', builder: (context, state) => const AcademicLiveScreen(showTimetable: false)),
+      GoRoute(path: '/student/timetable', builder: (context, state) => const AcademicLiveScreen(showTimetable: true)),
       GoRoute(path: '/student/attendance', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.attendance)),
       GoRoute(path: '/student/marks', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.marks)),
       GoRoute(path: '/student/assignments', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.assignments)),

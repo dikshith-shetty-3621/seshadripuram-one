@@ -205,3 +205,33 @@ export const importJobs = sqliteTable('import_jobs', {
   index('import_jobs_actor_idx').on(table.actorUserId),
   index('import_jobs_created_idx').on(table.createdAt),
 ]);
+
+
+export const announcements = sqliteTable('announcements', {
+  id: text('id').primaryKey(),
+  title: text('title').notNull(),
+  body: text('body').notNull(),
+  category: text('category').notNull().default('GENERAL'),
+  audienceRole: text('audience_role'),
+  publishedAt: text('published_at').notNull(),
+  isPublished: integer('is_published', { mode: 'boolean' }).notNull().default(false),
+  createdByUserId: text('created_by_user_id').references(() => users.id),
+}, (table) => [
+  index('announcements_published_idx').on(table.isPublished, table.publishedAt),
+  index('announcements_audience_role_idx').on(table.audienceRole),
+]);
+
+export const timetableEntries = sqliteTable('timetable_entries', {
+  id: text('id').primaryKey(),
+  dayOfWeek: integer('day_of_week').notNull(),
+  startTime: text('start_time').notNull(),
+  endTime: text('end_time').notNull(),
+  subject: text('subject').notNull(),
+  teacherName: text('teacher_name').notNull(),
+  room: text('room').notNull(),
+  sectionName: text('section_name'),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+}, (table) => [
+  index('timetable_day_idx').on(table.dayOfWeek, table.startTime),
+  index('timetable_section_idx').on(table.sectionName),
+]);
