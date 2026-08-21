@@ -169,7 +169,7 @@ class _Assignments extends StatelessWidget {
   Widget build(BuildContext context) => const DashboardSection(title: 'This week', child: Column(children: [
         _AssignmentRow(title: 'Responsive portfolio', subject: 'Web Technology', due: 'Due 26 Aug', color: AppColors.gold500),
         Divider(height: 24),
-        _AssignmentRow(title: 'Normalization case study', subject: 'Database Systems', due: 'Due 29 Aug', color: AppColors.navy600),
+        _AssignmentRow(title: 'Normalization case study', subject: 'Database Systems', due: 'Due 29 Aug', color: AppColors.navy700),
         Divider(height: 24),
         _AssignmentRow(title: 'Agile reflection', subject: 'Software Engineering', due: 'Submitted', color: AppColors.success),
       ]));
@@ -205,7 +205,7 @@ class _StructureRow extends StatelessWidget {
   final String label;
   final String value;
   @override
-  Widget build(BuildContext context) => Row(children: [Icon(icon, color: AppColors.navy600), const SizedBox(width: AppSpacing.md), Expanded(child: Text(label, style: Theme.of(context).textTheme.titleMedium)), Text(value, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700))]);
+  Widget build(BuildContext context) => Row(children: [Icon(icon, color: AppColors.navy700), const SizedBox(width: AppSpacing.md), Expanded(child: Text(label, style: Theme.of(context).textTheme.titleMedium)), Text(value, style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700))]);
 }
 
 class _Audit extends StatelessWidget {
