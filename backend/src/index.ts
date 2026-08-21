@@ -6,6 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { config } from './config';
 import { db } from './db';
 import { academicRouter } from './routes/academic';
+import { adminRouter } from './routes/admin';
 import { authRouter } from './routes/auth';
 
 export function createApp() {
@@ -37,6 +38,7 @@ export function createApp() {
     message: { error: 'Too many requests. Please try again later.' },
   }), authRouter);
   app.use('/api/academic', academicRouter);
+  app.use('/api/admin', adminRouter);
 
   app.get('/health', (_req, res) => res.json({ status: 'ok' }));
   app.get('/ready', async (_req, res) => {

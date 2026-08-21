@@ -188,3 +188,19 @@ export const teachingAssignments = sqliteTable('teaching_assignments', {
   index('teaching_assignments_teacher_idx').on(table.teacherId),
   index('teaching_assignments_offering_idx').on(table.subjectOfferingId),
 ]);
+
+
+export const importJobs = sqliteTable('import_jobs', {
+  id: text('id').primaryKey(),
+  actorUserId: text('actor_user_id').notNull().references(() => users.id),
+  entity: text('entity').notNull(),
+  status: text('status').notNull().default('PREVIEWED'), // PREVIEWED | COMMITTED | FAILED
+  totalRows: integer('total_rows').notNull(),
+  validRows: integer('valid_rows').notNull(),
+  invalidRows: integer('invalid_rows').notNull(),
+  errorsJson: text('errors_json').notNull(),
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  index('import_jobs_actor_idx').on(table.actorUserId),
+  index('import_jobs_created_idx').on(table.createdAt),
+]);

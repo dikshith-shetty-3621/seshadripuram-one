@@ -15,6 +15,13 @@
       "when": 1787346043780,
       "tag": "0001_magical_masked_marvel",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1787347233834,
+      "tag": "0002_minor_sue_storm",
+      "breakpoints": true
     }
   ]
 }

@@ -6,6 +6,7 @@ import '../../features/auth/domain/user_role.dart';
 import '../../features/auth/presentation/auth_providers.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/admin/dashboard/presentation/admin_dashboard_screen.dart';
+import '../../features/admin/imports/presentation/admin_import_screen.dart';
 import '../../features/student/dashboard/presentation/student_dashboard_screen.dart';
 import '../../features/teacher/dashboard/presentation/teacher_dashboard_screen.dart';
 
@@ -69,6 +70,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/admin/dashboard',
         builder: (context, state) => const AdminDashboardScreen(),
+      ),
+      GoRoute(
+        path: '/admin/imports',
+        builder: (context, state) => const AdminImportScreen(),
       ),
     ],
   );
