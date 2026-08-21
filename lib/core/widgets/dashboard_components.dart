@@ -54,7 +54,7 @@ class DashboardShell extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: MediaQuery.sizeOf(context).width < 760
-          ? const NavigationBar(
+          ? NavigationBar(
               selectedIndex: 0,
               destinations: [
                 NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
