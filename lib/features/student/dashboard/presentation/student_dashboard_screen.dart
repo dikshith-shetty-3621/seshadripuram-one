@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/dashboard_components.dart';
@@ -44,16 +45,27 @@ class StudentDashboardScreen extends StatelessWidget {
             ]),
           );
 
+          final explore = Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.sm, children: [
+            OutlinedButton.icon(onPressed: () => context.push('/student/timetable'), icon: const Icon(Icons.calendar_month_outlined), label: const Text('Full timetable')),
+            OutlinedButton.icon(onPressed: () => context.push('/student/attendance'), icon: const Icon(Icons.event_available), label: const Text('Attendance')),
+            OutlinedButton.icon(onPressed: () => context.push('/student/marks'), icon: const Icon(Icons.auto_graph_outlined), label: const Text('Marks')),
+            OutlinedButton.icon(onPressed: () => context.push('/student/assignments'), icon: const Icon(Icons.assignment_outlined), label: const Text('Assignments')),
+            OutlinedButton.icon(onPressed: () => context.push('/student/announcements'), icon: const Icon(Icons.campaign_outlined), label: const Text('All notices')),
+          ]);
           if (!wide) {
-            return const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               stats,
-              SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.xl),
               schedule,
-              SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: AppSpacing.xl),
               announcements,
+              const SizedBox(height: AppSpacing.xl),
+              Text('Explore', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: AppSpacing.sm),
+              explore,
             ]);
           }
-          return const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             stats,
             SizedBox(height: AppSpacing.xl),
             Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -61,6 +73,10 @@ class StudentDashboardScreen extends StatelessWidget {
               SizedBox(width: AppSpacing.lg),
               Expanded(child: announcements),
             ]),
+            const SizedBox(height: AppSpacing.xl),
+            Text('Explore', style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: AppSpacing.sm),
+            explore,
           ]);
         },
       ),

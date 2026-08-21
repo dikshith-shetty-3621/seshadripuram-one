@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/widgets/dashboard_components.dart';
@@ -51,9 +52,9 @@ class TeacherDashboardScreen extends StatelessWidget {
         Text('Quick actions', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: AppSpacing.sm),
         Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.sm, children: [
-          OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.fact_check_outlined), label: const Text('Take attendance')),
-          OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.assignment_outlined), label: const Text('New assignment')),
-          OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.campaign_outlined), label: const Text('Announcement')),
+          OutlinedButton.icon(onPressed: () => context.push('/teacher/attendance'), icon: const Icon(Icons.fact_check_outlined), label: const Text('Take attendance')),
+          OutlinedButton.icon(onPressed: () => context.push('/teacher/assignments'), icon: const Icon(Icons.assignment_outlined), label: const Text('New assignment')),
+          OutlinedButton.icon(onPressed: () => context.push('/teacher/announcements'), icon: const Icon(Icons.campaign_outlined), label: const Text('Announcement')),
         ]),
       ]),
     );

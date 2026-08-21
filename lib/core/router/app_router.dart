@@ -7,6 +7,7 @@ import '../../features/auth/presentation/auth_providers.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/admin/dashboard/presentation/admin_dashboard_screen.dart';
 import '../../features/admin/imports/presentation/admin_import_screen.dart';
+import '../widgets/demo_feature_screen.dart';
 import '../../features/student/dashboard/presentation/student_dashboard_screen.dart';
 import '../../features/teacher/dashboard/presentation/teacher_dashboard_screen.dart';
 
@@ -75,6 +76,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/admin/imports',
         builder: (context, state) => const AdminImportScreen(),
       ),
+      GoRoute(path: '/student/announcements', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.announcements)),
+      GoRoute(path: '/student/timetable', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.timetable)),
+      GoRoute(path: '/student/attendance', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.attendance)),
+      GoRoute(path: '/student/marks', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.marks)),
+      GoRoute(path: '/student/assignments', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.assignments)),
+      GoRoute(path: '/teacher/attendance', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.attendance)),
+      GoRoute(path: '/teacher/assignments', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.assignments)),
+      GoRoute(path: '/teacher/announcements', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.announcements)),
+      GoRoute(path: '/admin/structure', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.structure)),
+      GoRoute(path: '/admin/review-attendance', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.attendance)),
+      GoRoute(path: '/admin/audit-logs', builder: (context, state) => const DemoFeatureScreen(feature: DemoFeature.audit)),
     ],
   );
 });

@@ -43,9 +43,9 @@ class AdminDashboardScreen extends StatelessWidget {
         const SizedBox(height: AppSpacing.sm),
         Wrap(spacing: AppSpacing.sm, runSpacing: AppSpacing.sm, children: [
           OutlinedButton.icon(onPressed: () => context.push('/admin/imports'), icon: const Icon(Icons.file_upload_outlined), label: const Text('Import data')),
-          OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.account_tree_outlined), label: const Text('Academic structure')),
-          OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.fact_check_outlined), label: const Text('Review attendance')),
-          OutlinedButton.icon(onPressed: () {}, icon: const Icon(Icons.history), label: const Text('Audit logs')),
+          OutlinedButton.icon(onPressed: () => context.push('/admin/structure'), icon: const Icon(Icons.account_tree_outlined), label: const Text('Academic structure')),
+          OutlinedButton.icon(onPressed: () => context.push('/admin/review-attendance'), icon: const Icon(Icons.fact_check_outlined), label: const Text('Review attendance')),
+          OutlinedButton.icon(onPressed: () => context.push('/admin/audit-logs'), icon: const Icon(Icons.history), label: const Text('Audit logs')),
         ]),
         const SizedBox(height: AppSpacing.xl),
         const DashboardSection(
